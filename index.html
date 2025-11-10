@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Happy Birthday</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-20px);
+        }
+      }
+      @keyframes confetti {
+        0% {
+          transform: translateY(0) rotate(0deg);
+        }
+        100% {
+          transform: translateY(100vh) rotate(360deg);
+        }
+      }
+      .float {
+        animation: float 3s ease-in-out infinite;
+      }
+      .confetti {
+        position: fixed;
+        width: 15px;
+        height: 15px;
+        opacity: 1;
+        animation: confetti 5s linear forwards;
+        z-index: 999;
+      }
+      .birthday-cake {
+        position: relative;
+        height: 200px;
+        width: 200px;
+      }
+      .candle {
+        position: absolute;
+        width: 10px;
+        height: 50px;
+        background: linear-gradient(to bottom, gold, orange, red);
+        top: -50px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 2;
+        border-radius: 5px;
+      }
+      /* Gaya tombol */
+      .btn {
+        display: inline-block;
+        margin-top: 20px;
+        padding: 10px 20px;
+        background-color: #7b69ff; /* Warna ungu */
+        color: white; /* Warna teks putih */
+        text-decoration: none; /* Hilangkan garis bawah */
+        border-radius: 30px; /* Sudut melengkung */
+        font-weight: bold;
+        transition: box-shadow 0.3s ease, transform 0.3s ease; /* Efek transisi saat hover */
+      }
+      /* Efek hover tombol */
+      .btn:hover {
+        box-shadow: 0 8px 10px rgba(0, 0, 0, 0.2); /* Bayangan saat diarahkan */
+        transform: scale(1.05); /* Warna berubah jadi pink saat diarahkan */
+        background-color: #e52e71;
+      }
+      .flame {
+        position: absolute;
+        width: 15px;
+        height: 30px;
+        background: linear-gradient(to top, orange, yellow, white);
+        border-radius: 50% 50% 20% 20%;
+        top: -70px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 3;
+        filter: blur(1px);
+        animation: flicker 0.5s alternate infinite;
+      }
+      @keyframes flicker {
+        0%,
+        100% {
+          height: 30px;
+          width: 15px;
+        }
+        20% {
+          height: 35px;
+          width: 18px;
+        }
+        40% {
+          height: 28px;
+          width: 12px;
+        }
+      }
+      .message-input {
+        transition: all 0.3s ease;
+      }
+      .message-input:focus {
+        transform: scale(1.02);
+        box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+      }
+      .birthday-card-inner {
+        transition: transform 0.5s;
+        transform-style: preserve-3d;
+      }
+      .birthday-card-inner.is-flipped {
+        transform: rotateY(180deg);
+      }
+      .birthday-card-front,
+      .birthday-card-back {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        backface-visibility: hidden;
+      }
+      .birthday-card-back {
+        transform: rotateY(180deg);
+      }
+      .age-counter {
+        font-size: 10rem;
+        background: linear-gradient(45deg, #ff8a00, #e52e71, #ff8a00);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        animation: gradientShift 3s ease infinite;
+        background-size: 200% 200%;
+      }
+      @keyframes gradientShift {
+        0% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+        100% {
+          background-position: 0% 50%;
+        }
+      }
+    </style>
+  </head>
+  <body
+    class="min-h-screen bg-gradient-to-br from-pink-100 to-purple-100 font-sans flex flex-col items-center justify-center p-4"
+  >
+    <div id="confetti-container"></div>
+
+    <div
+      class="max-w-3xl w-full bg-white rounded-xl shadow-2xl overflow-hidden transform transition-all hover:scale-[1.01]"
+    >
+      <!-- Header with Balloons -->
+      <div
+        class="relative h-48 bg-gradient-to-r from-pink-400 to-purple-500 flex items-center justify-center overflow-hidden"
+      >
+        <div class="absolute inset-0 flex justify-around">
+          <div
+            class="h-full w-16 bg-red-500 rounded-b-full float"
+            style="animation-delay: 0.2s"
+          ></div>
+          <div
+            class="h-full w-16 bg-blue-500 rounded-b-full float"
+            style="animation-delay: 0.4s"
+          ></div>
+          <div
+            class="h-full w-16 bg-yellow-500 rounded-b-full float"
+            style="animation-delay: 0.6s"
+          ></div>
+          <div
+            class="h-full w-16 bg-green-500 rounded-b-full float"
+            style="animation-delay: 0.8s"
+          ></div>
+        </div>
+        <h1
+          class="text-4xl md:text-5xl font-bold text-white z-10 text-center px-4"
+        >
+          Happy Birthday!
+        </h1>
+      </div>
+
+      <!-- Main Content -->
+      <div class="p-8">
+        <!-- Age Counter -->
+        <div class="flex flex-col items-center mb-8">
+          <p class="text-xl text-gray-600 mb-2">Today you are</p>
+          <div class="age-counter" id="ageCounter">10</div>
+          <p class="text-xl text-gray-600 mt-2">years young!</p>
+        </div>
+
+        <!-- Cake with Candle -->
+        <div class="flex justify-center mb-8">
+          <div class="birthday-cake">
+            <img
+              src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/4f609cf1-15f5-442f-8388-75e6892e8a89.png"
+              alt="Colorful birthday cake with cream and strawberries decoration"
+              class="w-full h-full object-contain"
+            />
+            <div class="candle"></div>
+            <div class="flame"></div>
+          </div>
+        </div>
+
+        <!-- Interactive Card -->
+        <div class="mb-8 h-64 perspective-1000">
+          <div
+            class="relative h-full w-full birthday-card-inner"
+            id="birthdayCard"
+          >
+            <div
+              class="birthday-card-front bg-gradient-to-br from-blue-100 to-indigo-200 rounded-lg p-6 flex flex-col items-center justify-center cursor-pointer"
+            >
+              <i class="fas fa-gift text-6xl text-pink-500 mb-4"></i>
+              <h2 class="text-2xl font-bold text-gray-800 mb-2">
+                Click to Open Card
+              </h2>
+              <p class="text-gray-600">Your surprise is waiting!</p>
+            </div>
+            <div
+              class="birthday-card-back bg-gradient-to-br from-yellow-100 to-red-200 rounded-lg p-6 flex flex-col items-center justify-center"
+            >
+              <h2 class="text-2xl font-bold text-gray-800 mb-4">
+                Wish You The Best!
+              </h2>
+              <p class="text-center text-gray-700 mb-4">
+                Selamat ulang tahun ya maaf cuman bisa bikin yang kaya gini,
+                tahun depan insyaallah dah bikin yang lebih bagus!
+              </p>
+              <div class="flex gap-2">
+                <i class="fas fa-heart text-red-500 text-2xl"></i>
+                <i class="fas fa-star text-yellow-500 text-2xl"></i>
+                <i class="fas fa-smile-beam text-orange-500 text-2xl"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Music Player -->
+        <div class="bg-gray-100 rounded-lg p-4 mb-8">
+          <h3 class="text-xl font-semibold text-gray-800 mb-3">
+            Kata Kata Hari ini
+          </h3>
+          <div class="flex items-center">
+            <button
+              id="playBtn"
+              class="bg-pink-500 hover:bg-pink-600 text-white rounded-full w-12 h-12 flex items-center justify-center mr-4 transition-all"
+            >
+              <i class="fas fa-play text-xl"></i>
+            </button>
+            <div class="flex-1">
+              <p class="font-medium text-gray-800">
+                Didengerin Ya Cuma Sebentar
+              </p>
+              <div class="w-full bg-gray-300 rounded-full h-2 mt-2">
+                <div
+                  class="bg-pink-500 h-2 rounded-full w-0"
+                  id="progressBar"
+                ></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Message Area -->
+        <div class="mb-6">
+          <h3 class="text-xl font-semibold text-gray-800 mb-3">
+            Leave a Birthday Wish
+          </h3>
+          <textarea
+            id="birthdayMessage"
+            class="w-full p-3 border border-gray-300 rounded-lg message-input focus:outline-none focus:border-pink-500"
+            rows="4"
+            placeholder="Write your birthday wish here..."
+          ></textarea>
+          <button
+            id="submitWish"
+            class="mt-3 bg-pink-500 hover:bg-pink-600 text-white font-medium py-2 px-6 rounded-lg transition-all"
+          >
+            Submit Wish
+          </button>
+        </div>
+
+        <!-- Gallery -->
+      </div>
+    </div>
+    <a href="project2.html" class="btn">Klik Untuk Lanjut</a>
+    <script>
+      // Confetti effect
+      function createConfetti() {
+        const colors = [
+          "#f44336",
+          "#e91e63",
+          "#9c27b0",
+          "#673ab7",
+          "#3f51b5",
+          "#2196f3",
+          "#03a9f4",
+          "#00bcd4",
+          "#009688",
+          "#4caf50",
+          "#8bc34a",
+          "#cddc39",
+          "#ffeb3b",
+          "#ffc107",
+          "#ff9800",
+          "#ff5722",
+        ];
+
+        for (let i = 0; i < 50; i++) {
+          const confetti = document.createElement("div");
+          confetti.className = "confetti";
+          confetti.style.backgroundColor =
+            colors[Math.floor(Math.random() * colors.length)];
+          confetti.style.left = Math.random() * window.innerWidth + "px";
+          confetti.style.animationDuration = Math.random() * 3 + 2 + "s";
+          document.getElementById("confetti-container").appendChild(confetti);
+
+          setTimeout(() => {
+            confetti.remove();
+          }, 5000);
+        }
+      }
+
+      // Music player functionality
+      const audio = new Audio("ucapan.aac");
+      const playBtn = document.getElementById("playBtn");
+      const progressBar = document.getElementById("progressBar");
+
+      playBtn.addEventListener("click", () => {
+        if (audio.paused) {
+          audio.play();
+          playBtn.innerHTML = '<i class="fas fa-pause text-xl"></i>';
+          createConfetti();
+        } else {
+          audio.pause();
+          playBtn.innerHTML = '<i class="fas fa-play text-xl"></i>';
+        }
+      });
+
+      audio.addEventListener("timeupdate", () => {
+        const progress = (audio.currentTime / audio.duration) * 100;
+        progressBar.style.width = progress + "%";
+      });
+
+      audio.addEventListener("ended", () => {
+        playBtn.innerHTML = '<i class="fas fa-play text-xl"></i>';
+        progressBar.style.width = "0%";
+      });
+
+      // Interactive card flip
+      const birthdayCard = document.getElementById("birthdayCard");
+      birthdayCard.addEventListener("click", () => {
+        birthdayCard.classList.toggle("is-flipped");
+        createConfetti();
+      });
+
+      // Age counter animation
+      let age = 19;
+      const ageCounter = document.getElementById("ageCounter");
+
+      function updateAge() {
+        let current = parseInt(ageCounter.textContent);
+        if (current < age) {
+          ageCounter.textContent = current + 1;
+          setTimeout(updateAge, 100);
+        }
+      }
+
+      setTimeout(updateAge, 1000);
+
+      // Birthday message submission
+      const submitWish = document.getElementById("submitWish");
+      submitWish.addEventListener("click", () => {
+        const message = document.getElementById("birthdayMessage").value;
+        if (message.trim() !== "") {
+          alert("Thank you for your birthday wish!");
+          document.getElementById("birthdayMessage").value = "";
+          createConfetti();
+        } else {
+          alert("Please write a message before submitting.");
+        }
+      });
+    </script>
+  </body>
+</html>

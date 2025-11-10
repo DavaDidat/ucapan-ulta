@@ -1,0 +1,327 @@
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-30px); /* Perbaikan: transfrom jadi transform */
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Mengatur <body> sebagai flex container untuk menengahkan konten */
+body {
+  background-color: lightblue; /* Perbaikan: background-image jadi background-color */
+  color: #333; /* Warna teks umum, sesuaikan jika ingin putih */
+  min-height: 100vh; /* Pastikan body mengambil seluruh tinggi viewport */
+  display: flex;
+  flex-direction: column; /* Konten ditumpuk secara vertikal */
+  align-items: center; /* Menengahkan konten secara horizontal */
+  justify-content: center; /* Menengahkan konten secara vertikal jika ada ruang lebih */
+  padding: 20px; /* Tambahkan padding agar konten tidak menempel ke tepi */
+}
+
+/* .main tidak diperlukan jika body sudah menengahkan */
+/* Jika kamu tetap ingin .main sebagai wrapper, pastikan ia mengambil ruang yang cukup */
+.main {
+  flex: 1; /* Ini membuat .main mengisi sisa ruang vertikal */
+  display: flex;
+  justify-content: center; /* Menengahkan isi .main secara horizontal */
+  align-items: center; /* Menengahkan isi .main secara vertikal */
+  width: 100%; /* Pastikan .main mengambil lebar penuh */
+  padding: 30px; /* Padding di dalam .main */
+}
+
+.memory-card {
+  max-width: 1000px;
+  width: 90%;
+  background-color: rgba(252, 252, 252, 0.95);
+  padding: 30px;
+  margin: auto; /* Mengatur margin atas-bawah 0 dan kiri-kanan auto */
+  border-radius: 20px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+  animation: fadeIn 1s ease-in-out;
+  text-align: center;
+  transform-style: preserve-3d; /* Memastikan efek 3D berfungsi */
+}
+
+/* Baris untuk teks dan foto */
+.row {
+  display: flex;
+  align-items: center;
+  gap: 50px;
+  margin-bottom: 20px;
+  flex-wrap: wrap; /* Penting untuk responsivitas */
+  justify-content: center; /* Tambahkan ini agar item di dalam .row juga ke tengah */
+}
+
+.text-box {
+  padding: 20px;
+  background-color: #e0f7fa;
+  font-size: 18px;
+  width: 300px;
+}
+
+.text-box.square {
+  background-color: rgb(255, 255, 255);
+  border-radius: 20px;
+  padding: 40px;
+  width: 500px; /* Sesuaikan lebar ini agar tidak terlalu lebar di mobile */
+  height: 100px; /* Tinggi tetap, mungkin perlu disesuaikan dengan konten */
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  transform-style: preserve-3d;
+  animation: fadeIn 1s ease-in-out;
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+/* Styling dasar untuk photo-box */
+.photo-box {
+  width: 220px;
+  height: 220px;
+  background-color: #cfd8dc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  border-radius: 20px;
+  font-weight: bold;
+  border: 2px solid #90a4ae;
+  cursor: pointer; /* Penting: agar kursor berubah jadi tangan, menandakan bisa interaktif */
+  overflow: hidden;
+
+  /* --- Tambahkan Transisi di sini untuk animasi halus --- */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.photo {
+  width: 100%; /* Mengisi lebar penuh dari .photo-box */
+  height: 100%; /* Mengisi tinggi penuh dari .photo-box */
+  object-fit: cover; /* Memastikan gambar mengisi kotak dengan proporsi yang benar */
+  object-position: center; /* Memusatkan gambar dalam kotak */
+}
+
+/* --- Efek saat kursor menyentuh (hover) --- */
+.photo-box:hover {
+  transform: translateY(-8px); /* Menggeser ke atas sekitar 8px */
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3); /* Menambah bayangan agar terlihat 'mengambang' */
+}
+
+.text-box.square:hover {
+  transform: scale(1.05);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3); /* Perbaikan: black(0,0,0,0.3) jadi rgba(0,0,0,0.3) */
+}
+
+@media (max-width: 600px) {
+  .text-box {
+    width: 100%; /* Pastikan mengisi lebar penuh di mobile */
+    max-width: none; /* Hapus batasan max-width jika ada dari parent */
+  }
+
+  .text-box.square {
+    width: 100%; /* Pastikan mengisi lebar penuh di mobile */
+    height: auto; /* Biarkan tinggi menyesuaikan konten */
+  }
+
+  .row {
+    flex-direction: column;
+    align-items: center; /* Tetap tengahkan item di kolom */
+  }
+
+  .photo-box {
+    width: 100%; /* Agar foto mengambil lebar penuh */
+    max-width: 220px; /* Batasi maksimal lebar agar tidak terlalu besar */
+    height: auto; /* Biarkan tinggi menyesuaikan gambar */
+  }
+}
+
+.paint-order {
+  paint-order: fill stroke;
+
+  /* https://caniuse.com/mdn-css_properties_paint-order */
+  /* default is paint-order: fill stroke */
+  /* mdn: https://developer.mozilla.org/en-US/docs/Web/CSS/paint-order */
+}
+
+@layer demo.support {
+  h1 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    text-transform: uppercase;
+    font-size: calc(1rem + min(90px, 15vw));
+    font-weight: 900;
+    letter-spacing: -0.175ch;
+    line-height: 0.9;
+    color: white;
+    -webkit-text-stroke: 5px black;
+    text-shadow: 8px 8px black;
+
+    > span:first-of-type {
+      font-size: 0.75em;
+    }
+
+    > div {
+      display: flex;
+      gap: 0.5ch;
+    }
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+  }
+
+  html {
+    block-size: 100%;
+  }
+
+  body {
+    min-block-size: 100%;
+    font-family: system-ui, sans-serif;
+
+    display: grid;
+    place-content: center;
+    gap: 15vmin;
+  }
+
+  section {
+    display: grid;
+    place-items: center;
+    gap: 2vmin;
+
+    > p {
+      border: 2px solid #aaa;
+      border-radius: 1e3px;
+      padding-inline: 1.5ch;
+      line-height: 1.75;
+    }
+  }
+}
+
+h2 {
+  width: 0ch;
+  font-family: monospace;
+  overflow: hidden;
+  white-space: nowrap;
+  border-right: 2px solid black;
+  animation: typing 2s steps(17) forwards, blink 0.7s step-end infinite;
+}
+
+@keyframes typing {
+  from {
+    width: 100%;
+  }
+  to {
+    width: 0ch;
+  }
+}
+
+@keyframes blink {
+  from,
+  to {
+    border-color: transparent;
+  }
+  50% {
+    border-color: black;
+  }
+}
+
+.kontainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-self: center;
+  gap: 10px; /* Jarak antar elemen di dalam kontainer */
+  margin-top: 20px; /* Tambahkan margin atas untuk jarak dari konten sebelumnya */
+}
+
+body.dark {
+  background-color: #121212; /* Warna latar belakang gelap */
+  color: #e0e0e0; /* Warna teks terang untuk kontras */
+}
+
+body {
+  transition: background-color 0.5s ease-in, color 0.5s ease-out; /* Transisi halus saat beralih tema */
+}
+
+.p1 {
+  color: lightblue;
+}
+
+#teks-ketik {
+  font-family: monospace;
+  font-size: 1.5rem; /* Ukuran font yang lebih besar */
+  text-align: center; /* Rata tengah */
+  margin-bottom: 20px; /* Jarak bawah untuk teks */
+}
+
+main {
+  /* Hilangkan margin default di bagian bawah */
+  margin-bottom: 0;
+}
+
+/* Jika masih ada jarak, mungkin dari p atau elemen lain di dalam main.
+   Anda bisa coba nilai negatif jika perlu. */
+main {
+  margin-bottom: -39px; /* Sesuaikan nilai ini */
+}
+
+/* Sembunyikan checkbox bawaan */
+#mode-gelap-toggle {
+  /* Menyembunyikan checkbox asli agar tidak terlihat */
+  -webkit-appearance: none; /* untuk memastikan perubahan icon di Webkit (Chrome, Safari) */
+  -moz-appearance: none; /* untuk memastikan perubahan icon di Mozilla (Firefox) */
+  appearance: none; /* untuk menyembunyikan bentuk check box yang asli */
+  /* Atur ukuran dan posisi untuk menampung ikon */
+  width: 50px; /* Lebar tombol */
+  height: 25px; /* Tinggi tombol */
+  cursor: pointer;
+  background-color: #ccc; /* Warna latar belakang tombol default */
+  border-radius: 25px; /* Bentuk oval */
+  position: relative; /* Penting untuk posisi ikon */
+  outline: none; /* Hilangkan garis biru saat fokus */
+  box-shadow: 6px 5px 5px rgba(0, 0, 0, 0.2); /* Tambahkan bayangan untuk efek kedalaman */
+  transition: background-color 0.3s ease;
+}
+
+/* Ubah latar belakang tombol saat dicentang */
+#mode-gelap-toggle:checked {
+  background-color: #555; /* Warna latar belakang saat mode gelap */
+}
+
+/* Buat ikon "switch" atau "bola" di dalam tombol */
+#mode-gelap-toggle::after {
+  content: ""; /* Membuat elemen pseudo untuk ikon */
+  position: absolute; /* Posisi relatif terhadap tombol */
+  top: 2px;
+  left: 2px;
+  width: 21px; /* Ukuran bola */
+  height: 21px;
+  background-color: white; /* Warna bola default */
+  border-radius: 50%; /* Bentuk bulat */
+  transition: transform 0.3s ease;
+  /* Tambahkan ikon matahari di bola ini */
+  background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%23333" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-sun"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 90%; /* Sesuaikan ukuran ikon */
+}
+
+/* Pindahkan bola ke kanan dan ubah ikon saat dicentang */
+#mode-gelap-toggle:checked::after {
+  transform: translateX(
+    25px
+  ); /* untuk menggerakkan bola ke kanan saat checkbox dicentang, memberikan efek "sakelar" */
+  /* Ubah warna bola dan ikon saat mode gelap */
+  background-color: #333;
+  /* Ubah ikon menjadi bulan */
+  background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%23fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-moon"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>');
+}
